@@ -74,6 +74,10 @@ initial begin
     float_a = 16'hE108;
     float_b = 16'hF103;
     #10
+    
+    float_a = 16'h6108;
+    float_b = 16'hF103;
+    #10
 	$stop;
 end
 

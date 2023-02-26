@@ -71,12 +71,10 @@ always @(*) begin
             res_mantissa = fraction_sum[mantissa_width-1:0];
             if(exp_total[exponent_width] == 1'b1)begin
                 res = 0;
-            end else begin//different sign
+            end else begin
                 res = {sign, exp_total[exponent_width-1:0], res_mantissa};
             end
-        end else begin
-            res = 0;
-            
+        end else begin//different sign
             if(float_a[float_width-1] == 1'b1)begin
                 {cout_from_fraction_sum, fraction_sum} = shift_fraction_b - shift_fraction_a;
             end else begin
@@ -118,12 +116,14 @@ always @(*) begin
                     fraction_sum = fraction_sum <<10;
                     exp_total = exp_un_add - 10;
                 end
+            end else begin
+                exp_total = exp_un_add;
             end
 
             res_mantissa = fraction_sum[mantissa_width-1:0];
             if(exp_total[exponent_width] == 1'b1)begin
                 res = 0;
-            end else begin//different sign
+            end else begin
                 res = {sign, exp_total[exponent_width-1:0], res_mantissa};
             end
             
