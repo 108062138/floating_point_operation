@@ -29,7 +29,6 @@ wire [float_width-1 : 0] res;
 wire sign;
 wire [exponent_width - 1 : 0] exponent;
 wire [mantissa_width - 1 : 0] mantissa;
-wire [mantissa_width : 0] fraction_sum;
 assign sign = res[mantissa_width+exponent_width];
 assign exponent = res[mantissa_width+exponent_width-1:mantissa_width];
 assign mantissa = res[mantissa_width-1:0];
@@ -37,8 +36,7 @@ assign mantissa = res[mantissa_width-1:0];
 float_add inst_1(
 .float_a(float_a),
 .float_b(float_b),
-.res(res),
-.fraction_sum(fraction_sum)
+.res(res)
 );
 
 initial begin

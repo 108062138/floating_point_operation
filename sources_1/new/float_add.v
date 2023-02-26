@@ -3,8 +3,7 @@
 module float_add(
 input wire [float_width - 1 : 0] float_a,
 input wire [float_width - 1 : 0] float_b,
-output reg [float_width - 1 : 0] res, 
-output reg [mantissa_width:0] fraction_sum
+output reg [float_width - 1 : 0] res
 );
 
 parameter float_width = 16;
@@ -15,7 +14,7 @@ wire [exponent_width - 1: 0] exp_a, exp_b;
 wire [mantissa_width - 1:0] man_a,man_b;
 wire [mantissa_width:0] fraction_a, fraction_b;
 reg [mantissa_width-1:0] res_mantissa;
-reg [mantissa_width:0] shift_fraction_a, shift_fraction_b;
+reg [mantissa_width:0] shift_fraction_a, shift_fraction_b, fraction_sum;
 reg [12:0] shiftAmount;
 reg sign, cout_from_fraction_sum;
 reg signed [exponent_width:0] exp_total, exp_un_add;
@@ -66,14 +65,7 @@ always @(*) begin
             end else begin
                 exp_total = exp_un_add;
             end
-
             sign = float_a[float_width-1];
-            res_mantissa = fraction_sum[mantissa_width-1:0];
-            if(exp_total[exponent_width] == 1'b1)begin
-                res = 0;
-            end else begin
-                res = {sign, exp_total[exponent_width-1:0], res_mantissa};
-            end
         end else begin//different sign
             if(float_a[float_width-1] == 1'b1)begin
                 {cout_from_fraction_sum, fraction_sum} = shift_fraction_b - shift_fraction_a;
@@ -119,14 +111,13 @@ always @(*) begin
             end else begin
                 exp_total = exp_un_add;
             end
+        end
 
-            res_mantissa = fraction_sum[mantissa_width-1:0];
-            if(exp_total[exponent_width] == 1'b1)begin
-                res = 0;
-            end else begin
-                res = {sign, exp_total[exponent_width-1:0], res_mantissa};
-            end
-            
+        res_mantissa = fraction_sum[mantissa_width-1:0];
+        if(exp_total[exponent_width] == 1'b1)begin
+            res = 0;
+        end else begin
+            res = {sign, exp_total[exponent_width-1:0], res_mantissa};
         end
     end
 end
